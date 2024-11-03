@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Form, Field } from 'react-final-form';
 import { useDispatch } from 'react-redux';
@@ -15,13 +15,25 @@ function LoginForm() {
     return dispatch(validateAndLoginUser(formProps));
   }
   const [showPassword, setShowPassword] = useState(false);
-  const [formUpdateKey, setFormUpdateKey] = useState(false);
+  const formRef = useRef(null);
 
   const handleVisibility = () => {
     setShowPassword(!showPassword);
   };
   useEffect(() => {
-    setFormUpdateKey(!formUpdateKey);
+    const form = formRef.current;
+    if (!form) return;
+
+    const { values } = form.getState(); // store current form touched values
+    form.reset();
+
+    // Restore prev form values and trigger validation
+    Object.keys(values).forEach((field) => {
+      if (values[field]) {
+        // Only reapply touched values
+        form.change(field, values[field]);
+      }
+    });
   }, [i18n.language]);
 
   return (
@@ -29,77 +41,86 @@ function LoginForm() {
       fields={['email', 'password']}
       validate={validateLogin}
       onSubmit={onSubmit}
-      key={formUpdateKey}
     >
-      {({ handleSubmit, submitError, submitting, modifiedSinceLastSubmit }) => (
-        <form className="form" onSubmit={handleSubmit}>
-          <Field name="email">
-            {(field) => (
-              <div className="form__field">
-                <label htmlFor="email" className="form__label">
-                  {t('LoginForm.UsernameOrEmail')}
-                </label>
-                <input
-                  className="form__input"
-                  aria-label={t('LoginForm.UsernameOrEmailARIA')}
-                  type="text"
-                  id="email"
-                  autoComplete="username"
-                  autoCapitalize="none"
-                  {...field.input}
-                />
-                {field.meta.touched && field.meta.error && (
-                  <span className="form-error" aria-live="polite">
-                    {field.meta.error}
-                  </span>
-                )}
-              </div>
-            )}
-          </Field>
-          <Field name="password">
-            {(field) => (
-              <div className="form__field">
-                <label htmlFor="password" className="form__label">
-                  {t('LoginForm.Password')}
-                </label>
-                <div className="form__field__password">
+      {({
+        handleSubmit,
+        submitError,
+        submitting,
+        modifiedSinceLastSubmit,
+        form
+      }) => {
+        formRef.current = form;
+
+        return (
+          <form className="form" onSubmit={handleSubmit}>
+            <Field name="email">
+              {(field) => (
+                <div className="form__field">
+                  <label htmlFor="email" className="form__label">
+                    {t('LoginForm.UsernameOrEmail')}
+                  </label>
                   <input
                     className="form__input"
-                    aria-label={t('LoginForm.PasswordARIA')}
-                    type={showPassword ? 'text' : 'password'}
-                    id="password"
-                    autoComplete="current-password"
+                    aria-label={t('LoginForm.UsernameOrEmailARIA')}
+                    type="text"
+                    id="email"
+                    autoComplete="username"
+                    autoCapitalize="none"
                     {...field.input}
                   />
-                  <button
-                    className="form__eye__icon"
-                    type="button"
-                    onClick={handleVisibility}
-                    aria-hidden="true"
-                  >
-                    {showPassword ? (
-                      <AiOutlineEyeInvisible />
-                    ) : (
-                      <AiOutlineEye />
-                    )}
-                  </button>
+                  {field.meta.touched && field.meta.error && (
+                    <span className="form-error" aria-live="polite">
+                      {field.meta.error}
+                    </span>
+                  )}
                 </div>
-                {field.meta.touched && field.meta.error && (
-                  <span className="form-error" aria-live="polite">
-                    {field.meta.error}
-                  </span>
-                )}
-              </div>
+              )}
+            </Field>
+            <Field name="password">
+              {(field) => (
+                <div className="form__field">
+                  <label htmlFor="password" className="form__label">
+                    {t('LoginForm.Password')}
+                  </label>
+                  <div className="form__field__password">
+                    <input
+                      className="form__input"
+                      aria-label={t('LoginForm.PasswordARIA')}
+                      type={showPassword ? 'text' : 'password'}
+                      id="password"
+                      autoComplete="current-password"
+                      {...field.input}
+                    />
+                    <button
+                      className="form__eye__icon"
+                      type="button"
+                      onClick={handleVisibility}
+                      aria-hidden="true"
+                    >
+                      {showPassword ? (
+                        <AiOutlineEyeInvisible />
+                      ) : (
+                        <AiOutlineEye />
+                      )}
+                    </button>
+                  </div>
+                  {field.meta.touched && field.meta.error && (
+                    <span className="form-error" aria-live="polite">
+                      {field.meta.error}
+                    </span>
+                  )}
+                </div>
+              )}
+            </Field>
+            {submitError && !modifiedSinceLastSubmit && (
+              <span className="form-error">{submitError}</span>
             )}
-          </Field>
-          {submitError && !modifiedSinceLastSubmit && (
-            <span className="form-error">{submitError}</span>
-          )}
-          <Button type="submit" disabled={submitting}>
-            {t('LoginForm.Submit')}
-          </Button>
-        </form>
-      )}
+            <Button type="submit" disabled={submitting}>
+              {t('LoginForm.Submit')}
+            </Button>
+          </form>
+        );
+      }}
     </Form>
   );
 }
