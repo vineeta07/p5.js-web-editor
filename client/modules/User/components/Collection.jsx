@@ -17,12 +17,10 @@ const Collection = ({ collectionId, username }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const { user, collection, sorting, loading } = useSelector((state) => ({
-    user: state.user,
-    collection: getCollection(state, collectionId),
-    sorting: state.sorting,
-    loading: state.loading
-  }));
+  const user = useSelector((state) => state.user);
+  const collection = useSelector((state) => getCollection(state, collectionId));
+  const sorting = useSelector((state) => state.sorting);
+  const loading = useSelector((state) => state.loading);
 
   useEffect(() => {
     dispatch(CollectionsActions.getCollections(username));
