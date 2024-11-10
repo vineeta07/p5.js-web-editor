@@ -2,18 +2,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { removeFromCollection } from '../../IDE/actions/collections';
 import dates from '../../../utils/formatDate';
 import RemoveIcon from '../../../images/close.svg';
 
-const CollectionItemRow = ({
-  collection,
-  item,
-  isOwner,
-  removeFromCollection
-}) => {
+const CollectionItemRow = ({ collection, item, isOwner }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const projectIsDeleted = item.isDeleted;
-
   const handleSketchRemove = () => {
     const name = projectIsDeleted ? 'deleted sketch' : item.project.name;
 
@@ -22,7 +19,7 @@ const CollectionItemRow = ({
         t('Collection.DeleteFromCollection', { name_sketch: name })
       )
     ) {
-      removeFromCollection(collection.id, item.projectId);
+      dispatch(removeFromCollection(collection.id, item.projectId));
     }
   };
 
@@ -75,10 +72,9 @@ CollectionItemRow.propTypes = {
       user: PropTypes.shape({
         username: PropTypes.string.isRequired
       })
-    }).isRequired
+    })
   }).isRequired,
-  isOwner: PropTypes.bool.isRequired,
-  removeFromCollection: PropTypes.func.isRequired
+  isOwner: PropTypes.bool.isRequired
 };
 
 export default CollectionItemRow;
