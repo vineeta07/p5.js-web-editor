@@ -91,7 +91,7 @@ function ConsoleInput({ theme, dispatchConsoleEvent, fontSize }) {
           commandHistory.length - 1
         );
         cm.setValue(commandHistory[newCursor] || '');
-        const cursorPos = cm.current.getDoc().getLine(0).length - 1;
+        const cursorPos = cm.getDoc().getLine(0).length - 1;
         cm.getDoc().setCursor({ line: 0, ch: cursorPos });
         setCommandCursor(newCursor);
       }
