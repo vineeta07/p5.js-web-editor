@@ -13,19 +13,14 @@ import ArrowDownIcon from '../../../images/sort-arrow-down.svg';
 import CollectionMetadata from './CollectionMetadata';
 import CollectionItemRow from './CollectionItemRow';
 
-const Collection = ({ collectionId }) => {
+const Collection = ({ collectionId, username }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const { user, collection, sorting, loading, username } = useSelector(
-    (state) => ({
-      user: state.user,
-      collection: getCollection(state, collectionId),
-      sorting: state.sorting,
-      loading: state.loading,
-      username: state.user.username
-    })
-  );
+  const user = useSelector((state) => state.user);
+  const collection = useSelector((state) => getCollection(state, collectionId));
+  const sorting = useSelector((state) => state.sorting);
+  const loading = useSelector((state) => state.loading);
 
   useEffect(() => {
     dispatch(CollectionsActions.getCollections(username));
@@ -34,7 +29,7 @@ const Collection = ({ collectionId }) => {
 
   const isOwner = () =>
     user != null &&
-    user.username &&
+    typeof user.username !== 'undefined' &&
     collection?.owner?.username === user.username;
 
   const hasCollection = () => !!collection;
@@ -160,7 +155,8 @@ const Collection = ({ collectionId }) => {
 };
 
 Collection.propTypes = {
-  collectionId: PropTypes.string.isRequired
+  collectionId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired
 };
 
 export default Collection;
