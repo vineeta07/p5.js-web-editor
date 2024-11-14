@@ -148,7 +148,6 @@ window.onunhandledrejection = async function onUnhandledRejection(event) {
 };
 
 // Monkeypatch p5._friendlyError
-
 const _report = window.p5?.report;
 
 if (_report) {
