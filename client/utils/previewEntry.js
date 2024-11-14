@@ -148,7 +148,7 @@ window.onunhandledrejection = async function onUnhandledRejection(event) {
 };
 
 // Monkeypatch p5._friendlyError
-const _report = window.p5?.report;
+const _report = window.p5?._report;
 
 if (_report) {
   window.p5._report = function resolvedReport(message, method, color) {
