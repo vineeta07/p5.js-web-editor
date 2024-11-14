@@ -24,19 +24,7 @@ function ConsoleInput({ theme, fontSize }) {
       mode: 'javascript',
       inputStyle: 'contenteditable'
     });
-
-    cmInstance.current.getWrapperElement().style['font-size'] = `${fontSize}px`;
   }, []);
-
-  useEffect(() => {
-    if (cmInstance.current) {
-      cmInstance.current.setOption('theme', `p5-${theme}`);
-      cmInstance.current.getWrapperElement().style[
-        'font-size'
-      ] = `${fontSize}px`;
-      cmInstance.current.refresh();
-    }
-  }, [theme, fontSize]);
 
   useEffect(() => {
     const handleEnterKey = (cm, e) => {
@@ -146,7 +134,11 @@ function ConsoleInput({ theme, fontSize }) {
           }}
         />
       </div>
-      <div ref={codemirrorContainer} className="console__editor" />
+      <div
+        ref={codemirrorContainer}
+        className="console__editor"
+        style={{ fontSize: `${fontSize}px` }}
+      />
     </div>
   );
 }
