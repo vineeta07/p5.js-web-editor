@@ -38,8 +38,11 @@ const Console = () => {
   const handleMessageEvent = useHandleMessageEvent();
 
   useEffect(() => {
-    listen(handleMessageEvent);
-  }, [handleMessageEvent]);
+    const unsubscribe = listen(handleMessageEvent);
+    return function cleanup() {
+      unsubscribe();
+    };
+  });
 
   const handleClearConsole = () => dispatch(ConsoleActions.clearConsole());
   const handleCollapseConsole = () => dispatch(IDEActions.collapseConsole());
@@ -92,13 +95,7 @@ const Console = () => {
           />
         </div>
         {isExpanded && isPlaying && (
-          <ConsoleInput
-            theme={theme}
-            dispatchConsoleEvent={(event) =>
-              dispatch(ConsoleActions.dispatchConsoleEvent(event))
-            }
-            fontSize={fontSize}
-          />
+          <ConsoleInput theme={theme} fontSize={fontSize} />
         )}
       </div>
     </section>

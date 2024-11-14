@@ -4,12 +4,13 @@ import CodeMirror from 'codemirror';
 import { Encode } from 'console-feed';
 
 import RightArrowIcon from '../../../images/right-arrow.svg';
+import { dispatchConsoleEvent } from '../../IDE/actions/console';
 import { dispatchMessage, MessageTypes } from '../../../utils/dispatcher';
 
 // heavily inspired by
 // https://github.com/codesandbox/codesandbox-client/blob/92a1131f4ded6f7d9c16945dc7c18aa97c8ada27/packages/app/src/app/components/Preview/DevTools/Console/Input/index.tsx
 
-function ConsoleInput({ theme, dispatchConsoleEvent, fontSize }) {
+function ConsoleInput({ theme, fontSize }) {
   const [commandHistory, setCommandHistory] = useState([]);
   const [commandCursor, setCommandCursor] = useState(-1);
   const codemirrorContainer = useRef(null);
@@ -25,12 +26,6 @@ function ConsoleInput({ theme, dispatchConsoleEvent, fontSize }) {
     });
 
     cmInstance.current.getWrapperElement().style['font-size'] = `${fontSize}px`;
-
-    return () => {
-      if (cmInstance.current) {
-        cmInstance.current = null;
-      }
-    };
   }, []);
 
   useEffect(() => {
@@ -78,7 +73,7 @@ function ConsoleInput({ theme, dispatchConsoleEvent, fontSize }) {
         cmInstance.current.off('keydown', handleEnterKey);
       }
     };
-  }, [commandHistory, dispatchConsoleEvent]);
+  }, [commandHistory]);
 
   useEffect(() => {
     const handleUpArrowKey = (cm, e) => {
@@ -158,7 +153,6 @@ function ConsoleInput({ theme, dispatchConsoleEvent, fontSize }) {
 
 ConsoleInput.propTypes = {
   theme: PropTypes.string.isRequired,
-  dispatchConsoleEvent: PropTypes.func.isRequired,
   fontSize: PropTypes.number.isRequired
 };
 
