@@ -19,11 +19,13 @@ window.loopProtect = loopProtect;
 
 const consoleBuffer = [];
 const LOGWAIT = 500;
+
 Hook(window.console, (log) => {
   consoleBuffer.push({
     log
   });
 });
+
 setInterval(() => {
   if (consoleBuffer.length > 0) {
     const message = {
@@ -60,6 +62,59 @@ function handleMessageEvent(e) {
 }
 
 window.addEventListener('message', handleMessageEvent);
+
+// setting up mouse x and y coordinates
+// similar to hooking into console?
+const canvasMouseBuffer = [];
+
+function hookIntoCanvas() {
+  const coordinatesDiv = document.createElement('div');
+
+  // ideally want this to be updated next to the Preview Header in IDEView eventually
+  coordinatesDiv.style.position = 'absolute';
+  coordinatesDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+  coordinatesDiv.style.padding = '5px';
+  coordinatesDiv.style.border = '1px solid #ccc';
+  coordinatesDiv.style.fontSize = '12px';
+  coordinatesDiv.style.zIndex = '1000';
+
+  document.body.appendChild(coordinatesDiv);
+
+  const waitForCanvas = () => {
+    const canvas = document.getElementById('defaultCanvas0');
+
+    if (canvas) {
+      console.log('canvas found, adding mouseover listener');
+
+      canvas.addEventListener('mousemove', (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        // console.log(`mouse coordinates: ${x} and ${y}`);
+        coordinatesDiv.innerHTML = `Mouse X: ${x}, Mouse Y: ${y}`;
+      });
+    } else {
+      console.log('canvas not found yet');
+      setTimeout(waitForCanvas, LOGWAIT);
+    }
+  };
+
+  waitForCanvas();
+}
+
+setInterval(() => {
+  if (canvasMouseBuffer.length > 0) {
+    const message = {
+      messages: canvasMouseBuffer,
+      source: 'sketch'
+    };
+    editor.postMessage(message, editorOrigin);
+    canvasMouseBuffer.length = 0;
+  }
+}, LOGWAIT);
+
+document.addEventListener('DOMContentLoaded', hookIntoCanvas);
 
 // catch reference errors, via http://stackoverflow.com/a/12747364/2994108
 window.onerror = async function onError(
