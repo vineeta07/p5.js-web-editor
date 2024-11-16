@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Form, Field } from 'react-final-form';
 import { useDispatch } from 'react-redux';
@@ -6,6 +6,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import Button from '../../../common/Button';
 import { validateLogin } from '../../../utils/reduxFormUtils';
 import { validateAndLoginUser } from '../actions';
+import { usePreserveFormValuesOnLanguageChange } from '../../IDE/hooks/custom-hooks';
 
 function LoginForm() {
   const { t, i18n } = useTranslation();
@@ -20,21 +21,8 @@ function LoginForm() {
   const handleVisibility = () => {
     setShowPassword(!showPassword);
   };
-  useEffect(() => {
-    const form = formRef.current;
-    if (!form) return;
 
-    const { values } = form.getState(); // store current form touched values
-    form.reset();
-
-    // Restore prev form values and trigger validation
-    Object.keys(values).forEach((field) => {
-      if (values[field]) {
-        // Only reapply touched values
-        form.change(field, values[field]);
-      }
-    });
-  }, [i18n.language]);
+  usePreserveFormValuesOnLanguageChange(formRef, i18n.language);
 
   return (
     <Form
