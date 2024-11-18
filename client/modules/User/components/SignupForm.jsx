@@ -7,7 +7,7 @@ import { validateSignup } from '../../../utils/reduxFormUtils';
 import { validateAndSignUpUser } from '../actions';
 import Button from '../../../common/Button';
 import apiClient from '../../../utils/apiClient';
-import { useSyncFormTranslations } from '../../../common/useSyncFormTranslations';
+import useSyncFormTranslations from '../../../common/useSyncFormTranslations';
 
 function asyncValidate(fieldToValidate, value) {
   if (!value || value.trim().length === 0) {
