@@ -7,7 +7,7 @@ import { validateSignup } from '../../../utils/reduxFormUtils';
 import { validateAndSignUpUser } from '../actions';
 import Button from '../../../common/Button';
 import apiClient from '../../../utils/apiClient';
-import { usePreserveFormValuesOnLanguageChange } from '../../IDE/hooks/custom-hooks';
+import { useSyncFormTranslations } from '../../../common/useSyncFormTranslations';
 
 function asyncValidate(fieldToValidate, value) {
   if (!value || value.trim().length === 0) {
@@ -50,7 +50,7 @@ function SignupForm() {
   const handleConfirmVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
-  usePreserveFormValuesOnLanguageChange(formRef, i18n.language);
+  useSyncFormTranslations(formRef, i18n.language);
 
   return (
     <Form

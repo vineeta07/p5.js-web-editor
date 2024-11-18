@@ -6,7 +6,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import Button from '../../../common/Button';
 import { validateLogin } from '../../../utils/reduxFormUtils';
 import { validateAndLoginUser } from '../actions';
-import { usePreserveFormValuesOnLanguageChange } from '../../IDE/hooks/custom-hooks';
+import { useSyncFormTranslations } from '../../../common/useSyncFormTranslations';
 
 function LoginForm() {
   const { t, i18n } = useTranslation();
@@ -22,7 +22,7 @@ function LoginForm() {
     setShowPassword(!showPassword);
   };
 
-  usePreserveFormValuesOnLanguageChange(formRef, i18n.language);
+  useSyncFormTranslations(formRef, i18n.language);
 
   return (
     <Form

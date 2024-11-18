@@ -68,22 +68,3 @@ export const useEventListener = (
     document.addEventListener(event, callback, useCapture);
     return () => document.removeEventListener(event, callback, useCapture);
   }, list);
-
-// Usage: usePreserveFormValuesOnLanguageChange(formRef, language)
-// This hook ensures that form values are preserved when the language changes.
-// Pass a ref to the form instance and the current language as arguments.
-export const usePreserveFormValuesOnLanguageChange = (formRef, language) => {
-  useEffect(() => {
-    const form = formRef.current;
-    if (!form) return;
-
-    const { values } = form.getState();
-    form.reset();
-
-    Object.keys(values).forEach((field) => {
-      if (values[field]) {
-        form.change(field, values[field]);
-      }
-    });
-  }, [language]);
-};
