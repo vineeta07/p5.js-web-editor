@@ -22,6 +22,8 @@ const connectToMongoDB = async () => {
     mongoose.set('strictQuery', true);
 
     await mongoose.connect(mongoConnectionString, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
       serverSelectionTimeoutMS: 30000, // 30 seconds timeout
       socketTimeoutMS: 45000 // 45 seconds timeout
     });
