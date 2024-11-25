@@ -24,6 +24,7 @@ const App = () => {
   const [basePath, setBasePath] = useState('');
   const [textOutput, setTextOutput] = useState(false);
   const [gridOutput, setGridOutput] = useState(false);
+  const [coordinatesVisible, setCoordinatesVisible] = useState(false);
   registerFrame(window.parent, getConfig('EDITOR_URL'));
 
   function handleMessageEvent(message) {
@@ -46,6 +47,10 @@ const App = () => {
         break;
       case MessageTypes.EXECUTE:
         dispatchMessage(payload);
+        break;
+      case MessageTypes.COORDINATES:
+        // could probably just set payload to be t or f
+        setCoordinatesVisible(payload);
         break;
       default:
         break;
@@ -84,5 +89,7 @@ const App = () => {
     </React.Fragment>
   );
 };
+
+// <!-- insert component that reders coordinates here, put in same folder -->
 
 render(<App />, document.getElementById('root'));

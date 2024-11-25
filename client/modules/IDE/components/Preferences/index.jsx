@@ -19,6 +19,8 @@ import {
   setLinewrap
 } from '../../actions/preferences';
 
+// add the coordinatesVisible UI in here
+
 export default function Preferences() {
   const { t } = useTranslation();
 

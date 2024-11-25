@@ -2,6 +2,8 @@ import i18next from 'i18next';
 import apiClient from '../../../utils/apiClient';
 import * as ActionTypes from '../../../constants';
 
+// here, you'll need to import dispatchMessage from the dispatcher (look at actions/ide.js#startSkech() as reference)
+// that function should dispatch the value of the coordinate preference that's set in the UI
 function updatePreferences(formParams, dispatch) {
   apiClient
     .put('/preferences', formParams)

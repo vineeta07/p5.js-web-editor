@@ -13,6 +13,8 @@ export const initialState = {
   language: 'en-US',
   autocloseBracketsQuotes: true,
   autocompleteHinter: false
+  // add the coordinatesVisible state here, which you can reference in Preferences.jsx,
+  // and then import the action that dispatches the message in Preferences.jsx
 };
 
 const preferences = (state = initialState, action) => {

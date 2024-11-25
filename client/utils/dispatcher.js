@@ -13,6 +13,7 @@ export const MessageTypes = {
   REGISTER: 'REGISTER',
   EXECUTE: 'EXECUTE'
 };
+// Add a new message type (COORDIATES)
 
 export function registerFrame(newFrame, newOrigin) {
   const frameId = frameIndex;
