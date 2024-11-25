@@ -18,6 +18,27 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+// editor, nested iframe - intermediary for iframe and editor itself handling preview, nested iframe that is just the rendering
+// previewentry is just the inner rendering, catching all the console messages from the sketch that's running
+// outer iframe is capturing those and sending it back to the editor, is like this for security reasons, need the sketch to be running in an sandboxed iframe so it can't access
+// preview entry is on the innermost iframe
+// preview index is handling the rendering and all the messaging back and forth, rendering is done by PreviewEmbedFrame
+// embedFrame is assmebling all the html together and creates a frame that is setting the source, renderSketch() is most important
+// blobUrl is like a web url but lets you do and store that in the browser memory
+// intermediate iframe is routing all messages from the editor and dispatching the messages that is seting the files, when that is set it re-renders
+// what i want is a component on the midIframe, which is all running on the previewIndex
+// back in previewIndex, will post the message for toggling preferences
+
+// actions, IDE after hitting play startSketch, startSketch action dispatchesMessage
+
+// previewIndex, add a new state (can you see coordinates or net, set coordinates)
+// will also have state in base editor itself, and in preferences actions file, you'll have to create new function that dispatches a message similar to startSketch, where it dispatches and updates the internal state of the editor (266 - 268 is sending info to previewIndex.jsx)
+// in previewIndex, there is code handling receiving that message, will need to add a new messagetype to dispatcher and set the state of setCoordinatesVisible, state passed as paramter to component that will render the mouse position
+// dispatcher file is what's handling sending all the messages back and forth, can use it in the editor window and preview iframe
+
+// dispatcher sets up an eventlistener that listens for message events
+// create a new component in preview folder, add eventlistenere for hovermousemove, put that in this component so we can use React stuff, then in that component reference the editorframe by using window.parent, whereas in
+// have a ref to the editor frame (i.e window.parent -  two nested iframes in rendering of the editor)
 const App = () => {
   const [state, dispatch] = useReducer(filesReducer, [], initialState);
   const [isPlaying, setIsPlaying] = useState(false);

@@ -37,6 +37,7 @@ setInterval(() => {
   }
 }, LOGWAIT);
 
+// handling capturing messages from the console
 function handleMessageEvent(e) {
   // maybe don't need this?? idk!
   if (window.origin !== e.origin) return;
@@ -65,6 +66,9 @@ window.addEventListener('message', handleMessageEvent);
 
 // setting up mouse x and y coordinates
 // similar to hooking into console?
+
+// notes from cassie: may want to do sth with the dispatcher?
+// this file, previewEntry.js is just for catching console errors
 const canvasMouseBuffer = [];
 
 function hookIntoCanvas() {
