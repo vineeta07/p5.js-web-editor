@@ -37,7 +37,6 @@ setInterval(() => {
   }
 }, LOGWAIT);
 
-// handling capturing messages from the console
 function handleMessageEvent(e) {
   // maybe don't need this?? idk!
   if (window.origin !== e.origin) return;
@@ -65,40 +64,42 @@ function handleMessageEvent(e) {
 window.addEventListener('message', handleMessageEvent);
 
 // setting up mouse x and y coordinates
-// similar to hooking into console?
-
-// notes from cassie: may want to do sth with the dispatcher?
-// this file, previewEntry.js is just for catching console errors
-const canvasMouseBuffer = [];
 
 function hookIntoCanvas() {
-  const coordinatesDiv = document.createElement('div');
-
-  // ideally want this to be updated next to the Preview Header in IDEView eventually
-  coordinatesDiv.style.position = 'absolute';
-  coordinatesDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-  coordinatesDiv.style.padding = '5px';
-  coordinatesDiv.style.border = '1px solid #ccc';
-  coordinatesDiv.style.fontSize = '12px';
-  coordinatesDiv.style.zIndex = '1000';
-
-  document.body.appendChild(coordinatesDiv);
+  let isListenerAttached = false;
 
   const waitForCanvas = () => {
     const canvas = document.getElementById('defaultCanvas0');
 
-    if (canvas) {
+    if (canvas && !isListenerAttached) {
       console.log('canvas found, adding mouseover listener');
+      isListenerAttached = true;
 
-      canvas.addEventListener('mousemove', (event) => {
+      const mouseMoveHandler = (event) => {
         const rect = canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
 
-        // console.log(`mouse coordinates: ${x} and ${y}`);
-        coordinatesDiv.innerHTML = `Mouse X: ${x}, Mouse Y: ${y}`;
+        const message = {
+          payload: { xVal: x, yVal: y },
+          type: 'COORDINATES'
+        };
+        window.parent.postMessage(message, window.parent.location.origin);
+      };
+
+      canvas.addEventListener('mousemove', mouseMoveHandler);
+
+      const observer = new MutationObserver(() => {
+        if (!document.body.contains(canvas)) {
+          console.log('Canvas removed, cleaning up listener');
+          canvas.removeEventListener('mousemove', mouseMoveHandler);
+          observer.disconnect();
+          isListenerAttached = false;
+        }
       });
-    } else {
+
+      observer.observe(document.body, { childList: true, subtree: true });
+    } else if (!canvas) {
       console.log('canvas not found yet');
       setTimeout(waitForCanvas, LOGWAIT);
     }
@@ -106,17 +107,6 @@ function hookIntoCanvas() {
 
   waitForCanvas();
 }
-
-setInterval(() => {
-  if (canvasMouseBuffer.length > 0) {
-    const message = {
-      messages: canvasMouseBuffer,
-      source: 'sketch'
-    };
-    editor.postMessage(message, editorOrigin);
-    canvasMouseBuffer.length = 0;
-  }
-}, LOGWAIT);
 
 document.addEventListener('DOMContentLoaded', hookIntoCanvas);
 
