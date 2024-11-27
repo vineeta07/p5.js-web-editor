@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import apiClient from '../../../utils/apiClient';
 import * as ActionTypes from '../../../constants';
+import { dispatchMessage, MessageTypes } from '../../../utils/dispatcher';
 
 function updatePreferences(formParams, dispatch) {
   apiClient
@@ -12,6 +13,30 @@ function updatePreferences(formParams, dispatch) {
         error: error?.response?.data
       });
     });
+}
+
+export function setCoordinates(value) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: ActionTypes.SET_COORDINATES,
+      value
+    });
+
+    dispatchMessage({
+      type: MessageTypes.COORDINATES_VISIBILITY,
+      payload: value
+    });
+
+    const state = getState();
+    if (state.user.authenticated) {
+      const formParams = {
+        preferences: {
+          coordinates: value
+        }
+      };
+      updatePreferences(formParams, dispatch);
+    }
+  };
 }
 
 export function setFontSize(value) {

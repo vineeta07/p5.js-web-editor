@@ -12,7 +12,8 @@ export const initialState = {
   autorefresh: false,
   language: 'en-US',
   autocloseBracketsQuotes: true,
-  autocompleteHinter: false
+  autocompleteHinter: false,
+  coordinates: false
 };
 
 const preferences = (state = initialState, action) => {
@@ -46,6 +47,10 @@ const preferences = (state = initialState, action) => {
     case ActionTypes.SET_AUTOCOMPLETE_HINTER:
       return Object.assign({}, state, {
         autocompleteHinter: action.value
+      });
+    case ActionTypes.SET_COORDINATES:
+      return Object.assign({}, state, {
+        coordinates: action.value
       });
     default:
       return state;

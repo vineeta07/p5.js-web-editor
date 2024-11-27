@@ -16,7 +16,8 @@ import {
   setLintWarning,
   setAutocloseBracketsQuotes,
   setAutocompleteHinter,
-  setLinewrap
+  setLinewrap,
+  setCoordinates
 } from '../../actions/preferences';
 
 export default function Preferences() {
@@ -342,28 +343,29 @@ export default function Preferences() {
             <div className="preference__options">
               <input
                 type="radio"
-                onChange={() => dispatch(setLinewrap(true))}
+                onChange={() => dispatch(setCoordinates(true))}
                 aria-label={t('Preferences.CoordinatesOnARIA')}
                 name="coordinates"
                 id="coordinates-on"
                 className="preference__radio-button"
                 value="On"
-                checked={coordinates}
+                checked={coordinates === true}
               />
-              <label htmlFor="linewrap-on" className="preference__option">
+              <label htmlFor="coordinates-on" className="preference__option">
                 {t('Preferences.On')}
+                {coordinates === true}
               </label>
               <input
                 type="radio"
-                onChange={() => dispatch(setLinewrap(false))}
+                onChange={() => dispatch(setCoordinates(false))}
                 aria-label={t('Preferences.CoordinatesOffARIA')}
                 name="coordinates"
                 id="coordinates-off"
                 className="preference__radio-button"
                 value="Off"
-                checked={!coordinates}
+                checked={coordinates === false}
               />
-              <label htmlFor="linewrap-off" className="preference__option">
+              <label htmlFor="coordinates-off" className="preference__option">
                 {t('Preferences.Off')}
               </label>
             </div>

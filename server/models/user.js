@@ -74,7 +74,8 @@ const userSchema = new Schema(
       autorefresh: { type: Boolean, default: false },
       language: { type: String, default: 'en-US' },
       autocloseBracketsQuotes: { type: Boolean, default: true },
-      autocompleteHinter: { type: Boolean, default: false }
+      autocompleteHinter: { type: Boolean, default: false },
+      coordinates: { type: Boolean, default: false }
     },
     totalSize: { type: Number, default: 0 },
     cookieConsent: {
