@@ -12,7 +12,8 @@ export const MessageTypes = {
   SKETCH: 'SKETCH',
   REGISTER: 'REGISTER',
   EXECUTE: 'EXECUTE',
-  COORDINATES: 'COORDINATES'
+  COORDINATES: 'COORDINATES',
+  COORDINATES_VISIBILITY: 'COORDINATES_VISIBILITY'
 };
 
 export function registerFrame(newFrame, newOrigin) {

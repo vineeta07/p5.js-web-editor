@@ -27,7 +27,8 @@ const App = () => {
   const [basePath, setBasePath] = useState('');
   const [textOutput, setTextOutput] = useState(false);
   const [gridOutput, setGridOutput] = useState(false);
-  const [coordinatesVisible] = useState(true);
+  const [userTheme, setUserTheme] = useState('light');
+  const [coordinatesVisible, setCoordinatesVisible] = useState(false);
 
   const { updateCoordinates } = useCoordinates();
 
@@ -41,6 +42,7 @@ const App = () => {
         setBasePath(payload.basePath);
         setTextOutput(payload.textOutput);
         setGridOutput(payload.gridOutput);
+        setUserTheme(payload.userTheme);
         break;
       case MessageTypes.START:
         setIsPlaying(true);
@@ -56,6 +58,9 @@ const App = () => {
         break;
       case MessageTypes.COORDINATES:
         updateCoordinates(payload);
+        break;
+      case MessageTypes.COORDINATES_VISIBILITY:
+        setCoordinatesVisible(payload);
         break;
       default:
         break;
@@ -88,9 +93,9 @@ const App = () => {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme[userTheme]}>
       <GlobalStyle />
-      {coordinatesVisible && <CoordinateTracker coordinates />}
+      {coordinatesVisible && <CoordinateTracker />}
       <EmbedFrame
         files={memoizedFiles}
         isPlaying={isPlaying}

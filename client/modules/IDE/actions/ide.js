@@ -260,7 +260,8 @@ export function startSketch() {
         files: state.files,
         basePath: window.location.pathname,
         gridOutput: state.preferences.gridOutput,
-        textOutput: state.preferences.textOutput
+        textOutput: state.preferences.textOutput,
+        userTheme: state.preferences.theme
       }
     });
     dispatchMessage({
