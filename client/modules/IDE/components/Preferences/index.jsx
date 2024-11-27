@@ -28,6 +28,7 @@ export default function Preferences() {
     fontSize,
     autosave,
     linewrap,
+    coordinates,
     lineNumbers,
     lintWarning,
     textOutput,
@@ -328,6 +329,39 @@ export default function Preferences() {
                 className="preference__radio-button"
                 value="Off"
                 checked={!linewrap}
+              />
+              <label htmlFor="linewrap-off" className="preference__option">
+                {t('Preferences.Off')}
+              </label>
+            </div>
+          </div>
+          <div className="preference">
+            <h4 className="preference__title">
+              {t('Preferences.Coordinates')}
+            </h4>
+            <div className="preference__options">
+              <input
+                type="radio"
+                onChange={() => dispatch(setLinewrap(true))}
+                aria-label={t('Preferences.CoordinatesOnARIA')}
+                name="coordinates"
+                id="coordinates-on"
+                className="preference__radio-button"
+                value="On"
+                checked={coordinates}
+              />
+              <label htmlFor="linewrap-on" className="preference__option">
+                {t('Preferences.On')}
+              </label>
+              <input
+                type="radio"
+                onChange={() => dispatch(setLinewrap(false))}
+                aria-label={t('Preferences.CoordinatesOffARIA')}
+                name="coordinates"
+                id="coordinates-off"
+                className="preference__radio-button"
+                value="Off"
+                checked={!coordinates}
               />
               <label htmlFor="linewrap-off" className="preference__option">
                 {t('Preferences.Off')}

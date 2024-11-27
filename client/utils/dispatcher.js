@@ -11,7 +11,8 @@ export const MessageTypes = {
   FILES: 'FILES',
   SKETCH: 'SKETCH',
   REGISTER: 'REGISTER',
-  EXECUTE: 'EXECUTE'
+  EXECUTE: 'EXECUTE',
+  COORDINATES: 'COORDINATES'
 };
 
 export function registerFrame(newFrame, newOrigin) {
