@@ -19,7 +19,8 @@ export const userResponse = {
     autorefresh: false,
     language: 'en-US',
     autocloseBracketsQuotes: true,
-    autocompleteHinter: false
+    autocompleteHinter: false,
+    coordinates: false
   },
   apiKeys: [],
   verified: 'verified',
