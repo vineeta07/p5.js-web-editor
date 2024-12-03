@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useRef, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import CodeMirror from 'codemirror';
+import { useDispatch } from 'react-redux';
 import { Encode } from 'console-feed';
 
 import RightArrowIcon from '../../../images/right-arrow.svg';
