@@ -56,7 +56,7 @@ const App = () => {
         dispatchMessage(payload);
         break;
       case MessageTypes.COORDINATES_VISIBILITY:
-        setCoordinatesVisible(payload);
+        if (isPlaying) setCoordinatesVisible(payload);
         break;
       default:
         break;
