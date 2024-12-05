@@ -261,7 +261,8 @@ export function startSketch() {
         basePath: window.location.pathname,
         gridOutput: state.preferences.gridOutput,
         textOutput: state.preferences.textOutput,
-        userTheme: state.preferences.theme
+        userTheme: state.preferences.theme,
+        coordinates: state.preferences.coordinates
       }
     });
     dispatchMessage({
