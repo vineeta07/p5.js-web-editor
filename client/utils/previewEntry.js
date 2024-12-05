@@ -19,13 +19,11 @@ window.loopProtect = loopProtect;
 
 const consoleBuffer = [];
 const LOGWAIT = 500;
-
 Hook(window.console, (log) => {
   consoleBuffer.push({
     log
   });
 });
-
 setInterval(() => {
   if (consoleBuffer.length > 0) {
     const message = {
