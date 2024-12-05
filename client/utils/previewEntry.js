@@ -63,53 +63,6 @@ function handleMessageEvent(e) {
 
 window.addEventListener('message', handleMessageEvent);
 
-// setting up mouse x and y coordinates
-
-function hookIntoCanvas() {
-  let isListenerAttached = false;
-
-  const waitForCanvas = () => {
-    const canvas = document.getElementById('defaultCanvas0');
-
-    if (canvas && !isListenerAttached) {
-      console.log('canvas found, adding mouseover listener');
-      isListenerAttached = true;
-
-      const mouseMoveHandler = (event) => {
-        const rect = canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-
-        const message = {
-          payload: { xVal: x, yVal: y },
-          type: 'COORDINATES'
-        };
-        window.parent.postMessage(message, window.parent.location.origin);
-      };
-
-      canvas.addEventListener('mousemove', mouseMoveHandler);
-
-      const observer = new MutationObserver(() => {
-        if (!document.body.contains(canvas)) {
-          console.log('Canvas removed, cleaning up listener');
-          canvas.removeEventListener('mousemove', mouseMoveHandler);
-          observer.disconnect();
-          isListenerAttached = false;
-        }
-      });
-
-      observer.observe(document.body, { childList: true, subtree: true });
-    } else if (!canvas) {
-      console.log('canvas not found yet');
-      setTimeout(waitForCanvas, LOGWAIT);
-    }
-  };
-
-  waitForCanvas();
-}
-
-document.addEventListener('DOMContentLoaded', hookIntoCanvas);
-
 // catch reference errors, via http://stackoverflow.com/a/12747364/2994108
 window.onerror = async function onError(
   msg,
