@@ -315,6 +315,7 @@ function EmbedFrame({ files, isPlaying, basePath, gridOutput, textOutput }) {
   useEffect(renderSketch, [files, isPlaying]);
   return (
     <Frame
+      id="previewIframe0"
       aria-label="Sketch Preview"
       role="main"
       frameBorder="0"
