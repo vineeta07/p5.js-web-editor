@@ -11,7 +11,6 @@ import { filesReducer, setFiles } from './filesReducer';
 import EmbedFrame from './EmbedFrame';
 import CoordinateTracker from './CoordinateTracker';
 import theme from '../../theme';
-import { CoordinatesProvider, useCoordinates } from './contexts';
 import getConfig from '../../utils/getConfig';
 import { initialState } from '../IDE/reducers/files';
 
@@ -30,8 +29,6 @@ const App = () => {
   const [userTheme, setUserTheme] = useState('light');
   const [coordinatesVisible, setCoordinatesVisible] = useState(false);
 
-  const { updateCoordinates } = useCoordinates();
-
   registerFrame(window.parent, getConfig('EDITOR_URL'));
 
   function handleMessageEvent(message) {
@@ -43,21 +40,20 @@ const App = () => {
         setTextOutput(payload.textOutput);
         setGridOutput(payload.gridOutput);
         setUserTheme(payload.userTheme);
+        setCoordinatesVisible(payload.coordinates);
         break;
       case MessageTypes.START:
         setIsPlaying(true);
         break;
       case MessageTypes.STOP:
         setIsPlaying(false);
+        setCoordinatesVisible(false);
         break;
       case MessageTypes.REGISTER:
         dispatchMessage({ type: MessageTypes.REGISTER });
         break;
       case MessageTypes.EXECUTE:
         dispatchMessage(payload);
-        break;
-      case MessageTypes.COORDINATES:
-        updateCoordinates(payload);
         break;
       case MessageTypes.COORDINATES_VISIBILITY:
         setCoordinatesVisible(payload);
@@ -95,7 +91,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme[userTheme]}>
       <GlobalStyle />
-      {coordinatesVisible && <CoordinateTracker />}
+      {coordinatesVisible && <CoordinateTracker isPlaying={isPlaying} />}
       <EmbedFrame
         files={memoizedFiles}
         isPlaying={isPlaying}
@@ -107,10 +103,4 @@ const App = () => {
   );
 };
 
-const Root = () => (
-  <CoordinatesProvider>
-    <App />
-  </CoordinatesProvider>
-);
-
-render(<Root />, document.getElementById('root'));
+render(<App />, document.getElementById('root'));
