@@ -5,7 +5,7 @@ import { remSize } from '../../theme';
 const CoordContainer = styled.div`
   z-index: 1000;
   padding: ${remSize(0.1)};
-  border-bottom: ${remSize(1)} dashed #a6a6a6;
+  // border-bottom: ${remSize(1)} dashed #a6a6a6;
   margin-bottom: ${remSize(4)};
 
   p {
@@ -15,6 +15,11 @@ const CoordContainer = styled.div`
     font-family: Inconsolata, monospace;
     font-weight: light;
     color: ${(props) => props.theme.Button.primary.default.foreground};
+  }
+
+  @media (max-width: 550px) {
+    // border-bottom: none;
+    margin-top: ${remSize(10)};
   }
 `;
 
